@@ -34,6 +34,7 @@ const Canvas = () => {
             case "arrow":
             case "circle":
             case "line":
+            case "pen":
             case "rectangle":
                 dispatch(setIsDrawing(true));
 
@@ -46,7 +47,7 @@ const Canvas = () => {
                     width: 0,
                     height: 0,
                     radius: 0,
-                    points: [],
+                    points: [clientX, clientY],
                     fill: 'rgba(0, 0, 0, 0)',
                     stroke: 'black',
                     strokeWidth: 2,
@@ -99,6 +100,14 @@ const Canvas = () => {
                         centerX: (startX + clientX) / 2,
                         centerY: (startY + clientY) / 2,
                         radius,
+                    }));
+
+                    break;
+
+                case "pen":
+                    dispatch(setCurrentShape({
+                        ...currentShape,
+                        points: [...currentShape.points as number[], clientX, clientY]
                     }));
 
                     break;

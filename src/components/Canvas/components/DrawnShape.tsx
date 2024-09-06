@@ -52,6 +52,20 @@ const DrawnShape: React.FC<DrawnShapeProps> = ({
             />
         );
 
+    case "pen":
+        return (
+            <Line
+                key={`pen-${shapeNumber}`}
+                opacity={1}
+                points={config.points as number[]}
+                stroke={config.stroke}
+                strokeWidth={config.strokeWidth}
+                lineCap="round"
+                lineJoin="round"
+                tension={0.1}
+            />
+        );
+
     case "rectangle":
         return (
             <Rect
