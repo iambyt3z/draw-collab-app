@@ -15,6 +15,10 @@ const rootSlice = createSlice({
             state.isDrawing = action.payload;
         },
 
+        "setIsPanning": (state, action: PayloadAction<boolean>) => {
+            state.isPanning = action.payload;
+        },
+
         "setKonvasPostion": (state, action: PayloadAction<{ x: number; y: number }>) => {
             state.konvasStagePosX = action.payload.x;
             state.konvasStagePosY = action.payload.y;
@@ -41,6 +45,7 @@ const rootSlice = createSlice({
 export const {
     setCurrentShape,
     setIsDrawing,
+    setIsPanning,
     setKonvasPostion,
     setSelectedToolName,
     setSelectedToolValue,

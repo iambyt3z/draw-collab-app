@@ -3,15 +3,17 @@ import { Layer, Stage } from "react-konva"
 import { ShapeProps } from "../../types";
 import { useAppSelector } from "../../state/store";
 import { useDispatch } from "react-redux";
-import { setCurrentShape, setIsDrawing, setKonvasPostion, setShapes, setZoom } from "../../state/reducer";
+import { setCurrentShape, setIsDrawing, setIsPanning, setKonvasPostion, setShapes, setZoom } from "../../state/reducer";
 import DrawnShape from "./components/DrawnShape";
 import { Stage as KonvaStage } from 'konva/lib/Stage';
 import { useRef } from "react";
+import getCursor from "./utils/getCurson";
 
 const Canvas = () => {
     const {
         currentShape,
         isDrawing,
+        isPanning,
         konvasStagePosX,
         konvasStagePosY,
         selectedToolValue,
@@ -21,84 +23,111 @@ const Canvas = () => {
 
     const dispatch = useDispatch();
     const stageRef = useRef<KonvaStage | null>(null);
+    const lastMousePos = useRef({ x: 0, y: 0 });
 
     const handleMouseDown = (event: KonvaEventObject<MouseEvent>) => {
         let { clientX, clientY } = event.evt;
         clientX = (clientX - konvasStagePosX) / (zoom / 100);
         clientY = (clientY - konvasStagePosY) / (zoom / 100);
-        dispatch(setIsDrawing(true));
 
-        const newShape: ShapeProps = {
-            type: selectedToolValue,
-            centerX: clientX,
-            centerY: clientY,
-            startX: clientX,
-            startY: clientY,
-            width: 0,
-            height: 0,
-            radius: 0,
-            points: [],
-            fill: 'rgba(0, 0, 0, 0)',
-            stroke: 'black',
-            strokeWidth: 2,
-        };
+        switch(selectedToolValue) {
+            case "arrow":
+            case "circle":
+            case "line":
+            case "rectangle":
+                dispatch(setIsDrawing(true));
 
-        dispatch(setCurrentShape(newShape));
+                const newShape: ShapeProps = {
+                    type: selectedToolValue,
+                    centerX: clientX,
+                    centerY: clientY,
+                    startX: clientX,
+                    startY: clientY,
+                    width: 0,
+                    height: 0,
+                    radius: 0,
+                    points: [],
+                    fill: 'rgba(0, 0, 0, 0)',
+                    stroke: 'black',
+                    strokeWidth: 2,
+                };
+
+                dispatch(setCurrentShape(newShape));
+                break;
+
+            case "hand":
+                dispatch(setIsPanning(true));
+                lastMousePos.current = { x: event.evt.clientX, y: event.evt.clientY };
+                break; 
+        }
     }
 
     const handleMouseMove = (event: KonvaEventObject<MouseEvent>) => {
-        if (!isDrawing || !currentShape) 
-            return;
+        if (isPanning) {
+            const dx = event.evt.clientX - lastMousePos.current.x;
+            const dy = event.evt.clientY - lastMousePos.current.y;
+            lastMousePos.current = { x: event.evt.clientX, y: event.evt.clientY };
 
-        let { clientX, clientY } = event.evt;
-        const { startX, startY, type } = currentShape;
-        clientX = (clientX - konvasStagePosX) / (zoom / 100);
-        clientY = (clientY - konvasStagePosY) / (zoom / 100);
+            dispatch(setKonvasPostion({
+                x: konvasStagePosX + dx,
+                y: konvasStagePosY + dy,
+            }));
+        }
 
-        switch (type) {
-            case "arrow":
-            case "line":
-                dispatch(setCurrentShape({
-                    ...currentShape,
-                    centerX: (startX + clientX) / 2,
-                    centerY: (startY + clientY) / 2,
-                    points: [startX, startY, clientX, clientY],
-                }));
+        else if (isDrawing && currentShape) {
+            let { clientX, clientY } = event.evt;
+            const { startX, startY, type } = currentShape;
+            clientX = (clientX - konvasStagePosX) / (zoom / 100);
+            clientY = (clientY - konvasStagePosY) / (zoom / 100);
 
-                break;
-            
-            case "circle":
-                const radius = Math.sqrt(Math.pow(clientX - startX, 2) + Math.pow(clientY - startY, 2)) / 2;
-                dispatch(setCurrentShape({
-                    ...currentShape,
-                    centerX: (startX + clientX) / 2,
-                    centerY: (startY + clientY) / 2,
-                    radius,
-                }));
+            switch (type) {
+                case "arrow":
+                case "line":
+                    dispatch(setCurrentShape({
+                        ...currentShape,
+                        centerX: (startX + clientX) / 2,
+                        centerY: (startY + clientY) / 2,
+                        points: [startX, startY, clientX, clientY],
+                    }));
 
-                break;
-            
-            case "rectangle":
-                dispatch(setCurrentShape({
-                    ...currentShape,
-                    width: clientX - startX,
-                    height: clientY - startY,
-                }));
+                    break;
+                
+                case "circle":
+                    const radius = Math.sqrt(Math.pow(clientX - startX, 2) + Math.pow(clientY - startY, 2)) / 2;
+                    dispatch(setCurrentShape({
+                        ...currentShape,
+                        centerX: (startX + clientX) / 2,
+                        centerY: (startY + clientY) / 2,
+                        radius,
+                    }));
 
-                break;
+                    break;
+                
+                case "rectangle":
+                    dispatch(setCurrentShape({
+                        ...currentShape,
+                        width: clientX - startX,
+                        height: clientY - startY,
+                    }));
 
-            default:
-                break;
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
     
     const handleMouseUp = () => {
-        if (!isDrawing || !currentShape) 
-            return;
+        if (isPanning) {
+            dispatch(setIsPanning(false));
+        }
 
-        dispatch(setShapes([...shapes, currentShape]));
-        dispatch(setCurrentShape(null));
-        dispatch(setIsDrawing(true));
+        else if (isDrawing && currentShape) {
+            dispatch(setShapes([...shapes, currentShape]));
+            dispatch(setCurrentShape(null));
+            dispatch(setIsDrawing(false));
+        }
     }
 
     const handleWheel = (event: KonvaEventObject<WheelEvent>) => {
@@ -164,6 +193,7 @@ const Canvas = () => {
             onMouseUp={handleMouseUp}
             onWheel={handleWheel}
             style={{
+                "cursor": getCursor(selectedToolValue, isPanning, isDrawing),
                 "position": "absolute",
                 "zIndex": "5"
             }}

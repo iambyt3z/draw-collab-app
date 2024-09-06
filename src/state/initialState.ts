@@ -3,6 +3,7 @@ import { ShapeProps, ToolName, ToolValue } from "../types";
 interface InitialRootState {
     currentShape: ShapeProps | null;
     isDrawing: boolean;
+    isPanning: boolean;
     konvasStagePosX: number;
     konvasStagePosY: number; 
     selectedToolName: ToolName;
@@ -14,6 +15,7 @@ interface InitialRootState {
 const initialRootState: InitialRootState = {
     "currentShape": null,
     "isDrawing": false,
+    "isPanning": false,
     "konvasStagePosX": 0,
     "konvasStagePosY": 0,
     "selectedToolName": "Rectangle",
