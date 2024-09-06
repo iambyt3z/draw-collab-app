@@ -1,11 +1,8 @@
 import { Box, Button, IconButton } from "@mui/material";
 import ToolSelector from "./components/ToolSelector";
 import MenuIcon from '@mui/icons-material/Menu';
-import { useState } from "react";
 
 const Header = () => {
-    const [toolSelected, setToolSelected] = useState("hand");
-
     return (
         <Box 
             display="flex"
@@ -30,10 +27,7 @@ const Header = () => {
                 <MenuIcon />
             </IconButton>
 
-            <ToolSelector
-                value={toolSelected}
-                onValueChange={setToolSelected}
-            />
+            <ToolSelector/>
 
             <Button variant="contained">
                 Share

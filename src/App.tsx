@@ -1,18 +1,16 @@
 import "@fontsource-variable/inter"
 
 import { Box } from "@mui/material"
-import { useState } from "react"
 import Header from "./components/Header"
+import Canvas from "./components/Canvas"
 
 function App() {
     return (
-        <html lang="en">
-            <body>
-                <Box height="100vh">
-                    <Header/>
-                </Box>
-            </body>
-        </html>
+        <Box height="100vh">
+            <Header/>
+
+            <Canvas/>
+        </Box>
     )
 }
 

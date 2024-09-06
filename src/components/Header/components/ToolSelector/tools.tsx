@@ -11,11 +11,12 @@ import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import RectangleIcon from '@mui/icons-material/Rectangle';
 import RectangleOutlinedIcon from '@mui/icons-material/RectangleOutlined';
 import TitleIcon from '@mui/icons-material/Title';
+import { ToolName, ToolValue } from '../../../../types';
 
 interface Tool {
-    name: string;
-    value: string;
-    id: string;
+    name: ToolName;
+    value: ToolValue;
+    id: ToolValue;
     icon: React.ReactNode;
     selectedIcon: React.ReactNode;
     dividerAfter?: boolean;
@@ -41,13 +42,6 @@ const tools: Tool[] = [
         "name": "Rectangle",
         "value": "rectangle",
         "id": "rectangle",
-        "icon": <RectangleOutlinedIcon/>,
-        "selectedIcon": <RectangleIcon/>,
-    },
-    {
-        "name": "Diamond",
-        "value": "diamond",
-        "id": "diamond",
         "icon": <RectangleOutlinedIcon/>,
         "selectedIcon": <RectangleIcon/>,
     },

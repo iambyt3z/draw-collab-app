@@ -1,34 +1,34 @@
 import {
-    Divider, 
     ToggleButton, 
     ToggleButtonGroup, 
     Tooltip 
 } from "@mui/material";
 
 import tools from "./tools";
+import { ToolValue } from "../../../../types";
+import { useAppDispatch, useAppSelector } from "../../../../state/store";
+import { setSelectedToolName, setSelectedToolValue } from "../../../../state/reducer";
 
-interface ToolSelectorProps {
-    value: string;
-    onValueChange: (newValue: string) => void; 
-}
+const ToolSelector = () => {
+    const selectedTool = useAppSelector((state) => state.selectedToolValue);
+    const dispatch = useAppDispatch();
 
-const ToolSelector: React.FC<ToolSelectorProps> = ({
-    value,
-    onValueChange,
-}) => {
     const handleChange = (
         _event: React.MouseEvent<HTMLElement>,
-        newValue: string | null,
+        newValue: ToolValue | null,
     ) => {
         if (newValue !== null) {
-            onValueChange(newValue);
+            const newToolName = tools.filter((tool) => (tool.value === newValue))[0].name;
+
+            dispatch(setSelectedToolValue(newValue));
+            dispatch(setSelectedToolName(newToolName));
         }
     };
 
     return (
         <ToggleButtonGroup
             exclusive
-            value={value}
+            value={selectedTool}
             onChange={handleChange}
             sx={{
                 "boxShadow": "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
@@ -38,34 +38,19 @@ const ToolSelector: React.FC<ToolSelectorProps> = ({
             {
                 tools.map((tool) => {
                     return (
-                        <>
-                            <Tooltip title={tool.name}>
-                                <ToggleButton
-                                    value={tool.value}
-                                    id={tool.id}
-                                    sx={{
-                                        "border": 0
-                                    }}
-                                >
-                                        {
-                                            (tool.value === value)
-                                                ? <>{tool.selectedIcon}</>
-                                                : <>{tool.icon}</>
-                                        }
-                                    
-                                </ToggleButton>
-                            </Tooltip>
-
-                            {
-                                (tool.dividerAfter) &&
-                                <Divider 
-                                    orientation="vertical"
-                                    variant="middle"
-                                    flexItem
-                                    sx={{ "marginX": "8px" }}
-                                />
-                            }
-                        </>
+                        <Tooltip title={tool.name} key={tool.id}>
+                            <ToggleButton
+                                value={tool.value}
+                                sx={{ "border": 0 }}
+                            >
+                                    {
+                                        (tool.value === selectedTool)
+                                            ? <>{tool.selectedIcon}</>
+                                            : <>{tool.icon}</>
+                                    }
+                                
+                            </ToggleButton>
+                        </Tooltip>
                     );
                 })
             }
