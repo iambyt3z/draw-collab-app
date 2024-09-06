@@ -24,6 +24,8 @@ const Canvas = () => {
 
     const handleMouseDown = (event: KonvaEventObject<MouseEvent>) => {
         let { clientX, clientY } = event.evt;
+        clientX = (clientX - konvasStagePosX) / (zoom / 100);
+        clientY = (clientY - konvasStagePosY) / (zoom / 100);
         dispatch(setIsDrawing(true));
 
         const newShape: ShapeProps = {
@@ -50,6 +52,8 @@ const Canvas = () => {
 
         let { clientX, clientY } = event.evt;
         const { startX, startY, type } = currentShape;
+        clientX = (clientX - konvasStagePosX) / (zoom / 100);
+        clientY = (clientY - konvasStagePosY) / (zoom / 100);
 
         switch (type) {
             case "arrow":
@@ -98,12 +102,12 @@ const Canvas = () => {
     }
 
     const handleWheel = (event: KonvaEventObject<WheelEvent>) => {
+        event.evt.preventDefault();
+
+        const stage = stageRef.current;
+        if (!stage) return;
+
         if(event.evt.ctrlKey) {
-            event.evt.preventDefault();
-
-            const stage = stageRef.current;
-            if (!stage) return;
-
             const oldScale = stage.scaleX();
             const scaleBy = 1.1;
             const newScale = event.evt.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy;
@@ -120,6 +124,28 @@ const Canvas = () => {
             };
 
             dispatch(setZoom(Math.round(clampedScale * 100)));
+            dispatch(setKonvasPostion(newPos));
+        }
+
+        else if(event.evt.shiftKey) {
+            const direction = event.evt.deltaY > 0 ? 1 : -1;
+
+            const newPos = {
+                x: stage.x() + direction * 50,
+                y: stage.y(),
+            };
+
+            dispatch(setKonvasPostion(newPos));
+        }
+
+        else {
+            const direction = event.evt.deltaY > 0 ? 1 : -1;
+
+            const newPos = {
+                x: stage.x(),
+                y: stage.y() + direction * 50,
+            };
+
             dispatch(setKonvasPostion(newPos));
         }
     }
