@@ -3,18 +3,24 @@ import { Layer, Stage } from "react-konva"
 import { ShapeProps } from "../../types";
 import { useAppSelector } from "../../state/store";
 import { useDispatch } from "react-redux";
-import { setCurrentShape, setIsDrawing, setShapes } from "../../state/reducer";
+import { setCurrentShape, setIsDrawing, setKonvasPostion, setShapes, setZoom } from "../../state/reducer";
 import DrawnShape from "./components/DrawnShape";
+import { Stage as KonvaStage } from 'konva/lib/Stage';
+import { useRef } from "react";
 
 const Canvas = () => {
     const {
         currentShape,
         isDrawing,
+        konvasStagePosX,
+        konvasStagePosY,
         selectedToolValue,
         shapes,
+        zoom,
     } = useAppSelector((state) => state);
 
     const dispatch = useDispatch();
+    const stageRef = useRef<KonvaStage | null>(null);
 
     const handleMouseDown = (event: KonvaEventObject<MouseEvent>) => {
         let { clientX, clientY } = event.evt;
@@ -91,13 +97,46 @@ const Canvas = () => {
         dispatch(setIsDrawing(true));
     }
 
+    const handleWheel = (event: KonvaEventObject<WheelEvent>) => {
+        if(event.evt.ctrlKey) {
+            event.evt.preventDefault();
+
+            const stage = stageRef.current;
+            if (!stage) return;
+
+            const oldScale = stage.scaleX();
+            const scaleBy = 1.1;
+            const newScale = event.evt.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy;
+            const clampedScale = Math.min(Math.max(newScale, 0.1), 5.0);
+
+            const mousePointTo = {
+                x: stage.getPointerPosition()!.x / oldScale - stage.x() / oldScale,
+                y: stage.getPointerPosition()!.y / oldScale - stage.y() / oldScale,
+            };
+
+            const newPos = {
+                x: -(mousePointTo.x - stage.getPointerPosition()!.x / clampedScale) * clampedScale,
+                y: -(mousePointTo.y - stage.getPointerPosition()!.y / clampedScale) * clampedScale,
+            };
+
+            dispatch(setZoom(Math.round(clampedScale * 100)));
+            dispatch(setKonvasPostion(newPos));
+        }
+    }
+
     return (
         <Stage
+            ref={stageRef}
             width={window.innerWidth}
             height={window.innerHeight}
+            scaleX={zoom / 100}
+            scaleY={zoom / 100}
+            x={konvasStagePosX}
+            y={konvasStagePosY}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
+            onWheel={handleWheel}
             style={{
                 "position": "absolute",
                 "zIndex": "5"

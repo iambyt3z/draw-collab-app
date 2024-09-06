@@ -15,6 +15,11 @@ const rootSlice = createSlice({
             state.isDrawing = action.payload;
         },
 
+        "setKonvasPostion": (state, action: PayloadAction<{ x: number; y: number }>) => {
+            state.konvasStagePosX = action.payload.x;
+            state.konvasStagePosY = action.payload.y;
+        },
+
         "setSelectedToolName": (state, action: PayloadAction<ToolName>) => {
             state.selectedToolName = action.payload;
         },
@@ -36,6 +41,7 @@ const rootSlice = createSlice({
 export const {
     setCurrentShape,
     setIsDrawing,
+    setKonvasPostion,
     setSelectedToolName,
     setSelectedToolValue,
     setShapes,
