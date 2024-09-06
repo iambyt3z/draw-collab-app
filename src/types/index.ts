@@ -20,8 +20,8 @@ export type ToolName =
     | "Select" 
     | "Text"
 
-export interface Shape {
-    type: string;
+export interface ShapeProps {
+    type: ToolValue;
     x: number;
     y: number;
     width?: number;

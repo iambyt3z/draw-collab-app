@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import initialRootState from "./initialState";
-import { Shape, ToolName, ToolValue } from "../types";
+import { ShapeProps, ToolName, ToolValue } from "../types";
 
 const rootSlice = createSlice({
     "name": "root",
     "initialState": initialRootState,
 
     "reducers": {
-        "setCurrentShape": (state, action: PayloadAction<Shape | null>) => {
+        "setCurrentShape": (state, action: PayloadAction<ShapeProps | null>) => {
             state.currentShape = action.payload;
         },
 
@@ -23,7 +23,7 @@ const rootSlice = createSlice({
             state.selectedToolValue = action.payload;
         },
 
-        "setShapes": (state, action: PayloadAction<Shape[]>) => {
+        "setShapes": (state, action: PayloadAction<ShapeProps[]>) => {
             state.shapes = action.payload;
         },
     }

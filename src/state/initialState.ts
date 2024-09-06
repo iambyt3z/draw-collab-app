@@ -1,11 +1,11 @@
-import { Shape, ToolName, ToolValue } from "../types";
+import { ShapeProps, ToolName, ToolValue } from "../types";
 
 interface InitialRootState {
-    currentShape: Shape | null;
+    currentShape: ShapeProps | null;
     isDrawing: boolean;
     selectedToolName: ToolName;
     selectedToolValue: ToolValue;
-    shapes: Shape[];
+    shapes: ShapeProps[];
 }
 
 const initialRootState: InitialRootState = {

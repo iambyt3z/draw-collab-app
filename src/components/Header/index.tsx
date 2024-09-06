@@ -11,6 +11,10 @@ const Header = () => {
             width="100%"
             pt={3}
             px={3}
+            zIndex={2}
+            position="absolute"
+            top={0}
+            left={0}
         >
             <IconButton sx={(theme) => ({
                 "&:hover": {
