@@ -5,9 +5,9 @@ import {
 } from "@mui/material";
 
 import tools from "./tools";
-import { ToolValue } from "../../../../types";
-import { useAppDispatch, useAppSelector } from "../../../../state/store";
-import { setSelectedToolName, setSelectedToolValue } from "../../../../state/reducer";
+import { useAppDispatch, useAppSelector } from "../../../../../../state/store";
+import { ToolValue } from "../../../../../../types";
+import { setSelectedToolName, setSelectedToolValue } from "../../../../../../state/reducer";
 
 const ToolSelector = () => {
     const selectedTool = useAppSelector((state) => state.selectedToolValue);
@@ -33,6 +33,7 @@ const ToolSelector = () => {
             sx={{
                 "boxShadow": "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                 "borderRadius": 2,
+                "pointerEvents": "all",
             }}
         >
             {

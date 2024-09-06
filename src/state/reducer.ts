@@ -26,6 +26,10 @@ const rootSlice = createSlice({
         "setShapes": (state, action: PayloadAction<ShapeProps[]>) => {
             state.shapes = action.payload;
         },
+
+        "setZoom": (state, action: PayloadAction<number>) => {
+            state.zoom = action.payload;
+        },
     }
 });
 
@@ -35,6 +39,7 @@ export const {
     setSelectedToolName,
     setSelectedToolValue,
     setShapes,
+    setZoom,
 } = rootSlice.actions
 
 export default rootSlice.reducer;

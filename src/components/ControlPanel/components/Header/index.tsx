@@ -9,12 +9,6 @@ const Header = () => {
             justifyContent="space-between"
             alignItems="flex-start"
             width="100%"
-            pt={3}
-            px={3}
-            zIndex={2}
-            position="absolute"
-            top={0}
-            left={0}
         >
             <IconButton sx={(theme) => ({
                 "&:hover": {
@@ -27,13 +21,17 @@ const Header = () => {
 
                 "backgroundColor": theme.palette.primary.main,
                 "borderRadius": '5px',
+                "pointerEvents": "all",
             })}>
                 <MenuIcon />
             </IconButton>
 
             <ToolSelector/>
 
-            <Button variant="contained">
+            <Button 
+                variant="contained"
+                sx={{ "pointerEvents": "all" }}
+            >
                 Share
             </Button>
         </Box>

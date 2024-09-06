@@ -1,16 +1,15 @@
 import "@fontsource-variable/inter"
 
-import { Box } from "@mui/material"
-import Header from "./components/Header"
 import Canvas from "./components/Canvas"
+import ControlPanel from "./components/ControlPanel"
 
 function App() {
     return (
-        <Box height="100vh">
-            <Header/>
+        <>
+            <ControlPanel/>
 
             <Canvas/>
-        </Box>
+        </>
     )
 }
 

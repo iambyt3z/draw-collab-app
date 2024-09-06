@@ -6,6 +6,7 @@ interface InitialRootState {
     selectedToolName: ToolName;
     selectedToolValue: ToolValue;
     shapes: ShapeProps[];
+    zoom: number;
 }
 
 const initialRootState: InitialRootState = {
@@ -14,6 +15,7 @@ const initialRootState: InitialRootState = {
     "selectedToolName": "Rectangle",
     "selectedToolValue": "rectangle",
     "shapes": [],
+    "zoom": 100,
 };
 
 export default initialRootState;

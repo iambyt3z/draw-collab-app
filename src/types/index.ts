@@ -22,8 +22,10 @@ export type ToolName =
 
 export interface ShapeProps {
     type: ToolValue;
-    x: number;
-    y: number;
+    centerX: number;
+    centerY: number;
+    startX: number;
+    startY: number;
     width?: number;
     height?: number;
     radius?: number;

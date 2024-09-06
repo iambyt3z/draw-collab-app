@@ -31,8 +31,8 @@ const DrawnShape: React.FC<DrawnShapeProps> = ({
         return (
             <Circle
                 key={`circle-${shapeNumber}`}
-                x={config.x}
-                y={config.y}
+                x={config.centerX}
+                y={config.centerY}
                 radius={config.radius}
                 fill={config.fill}
                 opacity={(isBeingDrawn) ? beingDrawnOpacity : 1}
@@ -56,8 +56,8 @@ const DrawnShape: React.FC<DrawnShapeProps> = ({
         return (
             <Rect
                 key={`rect-${shapeNumber}`}
-                x={config.x}
-                y={config.y}
+                x={config.startX}
+                y={config.startY}
                 width={config.width}
                 height={config.height}
                 fill={config.fill}
