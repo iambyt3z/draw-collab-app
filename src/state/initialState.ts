@@ -6,6 +6,7 @@ interface InitialRootState {
     isPanning: boolean;
     konvasStagePosX: number;
     konvasStagePosY: number; 
+    redoShapes: ShapeProps[];
     selectedToolName: ToolName;
     selectedToolValue: ToolValue;
     shapes: ShapeProps[];
@@ -18,6 +19,7 @@ const initialRootState: InitialRootState = {
     "isPanning": false,
     "konvasStagePosX": 0,
     "konvasStagePosY": 0,
+    "redoShapes": [],
     "selectedToolName": "Rectangle",
     "selectedToolValue": "rectangle",
     "shapes": [],

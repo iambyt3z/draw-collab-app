@@ -1,13 +1,74 @@
 import { Box, Chip, IconButton, Stack } from "@mui/material";
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import RedoIcon from '@mui/icons-material/Redo';
+import UndoIcon from '@mui/icons-material/Undo';
 import { useAppSelector } from "../../../../state/store";
 import { useDispatch } from "react-redux";
-import { setZoom } from "../../../../state/reducer";
+import { setRedoShapes, setShapes, setZoom } from "../../../../state/reducer";
+import { useCallback, useEffect } from "react";
 
 const Footer = () => {
-    const zoom = useAppSelector((state) => state.zoom);
+    const {
+        redoShapes,
+        shapes,
+        zoom,
+    } = useAppSelector((state) => state);
+
     const dispatch = useDispatch();
+
+    const handleUndo = useCallback(() => {
+        if (shapes.length === 0) 
+            return;
+
+        const newShapes = [...shapes];
+        const lastShape = newShapes.pop();
+        dispatch(setShapes(newShapes));
+
+        if (lastShape !== undefined)
+            dispatch(setRedoShapes([...redoShapes, lastShape]));
+        
+    }, [shapes, redoShapes]);
+
+    const handleRedo = useCallback(() => {
+        if (redoShapes.length === 0) 
+            return;
+
+        const newRedoShapes = [...redoShapes];
+        const lastRedoShape = newRedoShapes.pop();
+        dispatch(setRedoShapes(newRedoShapes));
+        
+        if (lastRedoShape !== undefined)
+            dispatch(setShapes([...shapes, lastRedoShape]));
+    }, [shapes, redoShapes]);
+
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (
+                event.ctrlKey && 
+                !event.shiftKey && 
+                (event.key === 'z' || event.key === 'Z')
+            ) {
+                event.preventDefault();
+                handleUndo();
+            } 
+            
+            else if (
+                event.ctrlKey && 
+                event.shiftKey && 
+                (event.key === 'z' || event.key === 'Z')
+            ) {
+                event.preventDefault();
+                handleRedo();
+            }
+        }
+
+        window.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [handleUndo, handleRedo]);
 
     const handleZoomIncrease = () => {
         if(zoom === 500)
@@ -62,6 +123,39 @@ const Footer = () => {
                     })}
                 >
                     <AddIcon/>
+                </IconButton>
+            </Stack>
+
+            <Stack
+                direction="row" 
+                spacing={1}
+                ml={3}
+                display="flex"
+                alignItems="center"
+                sx={{ "pointerEvents": "all" }}
+            >
+                <IconButton
+                    disabled={(shapes.length === 0)}
+                    onClick={handleUndo}
+                    sx={(theme) => ({
+                        "&.Mui-disabled": { "backgroundColor": theme.palette.grey[100] },
+                        "&:hover": { "backgroundColor": theme.palette.grey[400] },
+                        "backgroundColor": theme.palette.grey[300],
+                    })}
+                >
+                    <UndoIcon/>
+                </IconButton>
+
+                <IconButton
+                    disabled={(redoShapes.length === 0)}
+                    onClick={handleRedo}
+                    sx={(theme) => ({
+                        "&.Mui-disabled": { "backgroundColor": theme.palette.grey[100] },
+                        "&:hover": { "backgroundColor": theme.palette.grey[400] },
+                        "backgroundColor": theme.palette.grey[300]
+                    })}
+                >
+                    <RedoIcon/>
                 </IconButton>
             </Stack>
         </Box>

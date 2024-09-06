@@ -17,7 +17,8 @@ const getCursor = (
         selectedToolValue === "arrow" ||
         selectedToolValue === "circle" ||
         selectedToolValue === "line" ||
-        selectedToolValue === "rectangle"
+        selectedToolValue === "rectangle" ||
+        selectedToolValue === "pen"
     ) {
         return "crosshair";
     }
