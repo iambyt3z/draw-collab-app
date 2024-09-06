@@ -30,36 +30,39 @@ const Canvas = () => {
         clientX = (clientX - konvasStagePosX) / (zoom / 100);
         clientY = (clientY - konvasStagePosY) / (zoom / 100);
 
-        switch(selectedToolValue) {
-            case "arrow":
-            case "circle":
-            case "line":
-            case "pen":
-            case "rectangle":
-                dispatch(setIsDrawing(true));
+        if (
+            selectedToolValue === "hand" ||
+            event.evt.button === 1
+        ) {
+            lastMousePos.current = { x: event.evt.clientX, y: event.evt.clientY };
+            dispatch(setIsPanning(true));
+        }
 
-                const newShape: ShapeProps = {
-                    type: selectedToolValue,
-                    centerX: clientX,
-                    centerY: clientY,
-                    startX: clientX,
-                    startY: clientY,
-                    width: 0,
-                    height: 0,
-                    radius: 0,
-                    points: [clientX, clientY],
-                    fill: 'rgba(0, 0, 0, 0)',
-                    stroke: 'black',
-                    strokeWidth: 2,
-                };
+        else if (
+            selectedToolValue === "arrow" ||
+            selectedToolValue === "circle" ||
+            selectedToolValue === "line" ||
+            selectedToolValue === "pen" ||
+            selectedToolValue === "rectangle"
+        ) {
+            dispatch(setIsDrawing(true));
 
-                dispatch(setCurrentShape(newShape));
-                break;
+            const newShape: ShapeProps = {
+                type: selectedToolValue,
+                centerX: clientX,
+                centerY: clientY,
+                startX: clientX,
+                startY: clientY,
+                width: 0,
+                height: 0,
+                radius: 0,
+                points: [clientX, clientY],
+                fill: 'rgba(0, 0, 0, 0)',
+                stroke: 'black',
+                strokeWidth: 2,
+            };
 
-            case "hand":
-                dispatch(setIsPanning(true));
-                lastMousePos.current = { x: event.evt.clientX, y: event.evt.clientY };
-                break; 
+            dispatch(setCurrentShape(newShape));
         }
     }
 

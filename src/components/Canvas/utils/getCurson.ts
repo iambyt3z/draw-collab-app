@@ -5,7 +5,7 @@ const getCursor = (
     isPanning: boolean,
     isDrawing: boolean
 ): string => {
-    if (selectedToolValue === "hand" && isPanning) {
+    if (isPanning) {
         return "grabbing";
     }
 
