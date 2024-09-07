@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import initialRootState from "./initialState";
-import { ShapeProps, ToolName, ToolValue } from "../types";
+import { ShapeProps, ToolName, ToolValue } from "../../types";
 
 const rootSlice = createSlice({
     "name": "root",
@@ -19,9 +19,17 @@ const rootSlice = createSlice({
             state.isPanning = action.payload;
         },
 
+        "setIsPointingLaser": (state, action: PayloadAction<boolean>) => {
+            state.isPointingLaser = action.payload;
+        },
+
         "setKonvasPostion": (state, action: PayloadAction<{ x: number; y: number }>) => {
             state.konvasStagePosX = action.payload.x;
             state.konvasStagePosY = action.payload.y;
+        },
+
+        "setLaserPoints": (state, action: PayloadAction<number[]>) => {
+            state.laserPoints = action.payload;
         },
 
         "setRedoShapes": (state, action: PayloadAction<ShapeProps[]>) => {
@@ -50,7 +58,9 @@ export const {
     setCurrentShape,
     setIsDrawing,
     setIsPanning,
+    setIsPointingLaser,
     setKonvasPostion,
+    setLaserPoints,
     setRedoShapes,
     setSelectedToolName,
     setSelectedToolValue,

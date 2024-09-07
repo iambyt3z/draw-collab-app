@@ -89,6 +89,13 @@ const tools: Tool[] = [
         "icon": <ClearIcon/>,
         "selectedIcon": <ClearIcon/>,
     },
+    {
+        "name": "Laser",
+        "value": "laser",
+        "id": "laser",
+        "icon": <>L</>,
+        "selectedIcon": <>L</>,
+    },
 ];
 
 export default tools;

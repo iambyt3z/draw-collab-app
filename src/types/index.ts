@@ -1,8 +1,9 @@
 export type ToolValue = 
-    "hand" 
     | "arrow" 
     | "circle"  
     | "eraser"
+    | "hand"
+    | "laser" 
     | "line"
     | "pen"
     | "rectangle" 
@@ -10,10 +11,11 @@ export type ToolValue =
     | "text"
 
 export type ToolName =
-    "Hand" 
     | "Arrow" 
     | "Circle"
     | "Eraser"
+    | "Hand"
+    | "Laser"
     | "Line"
     | "Pen"
     | "Rectangle" 

@@ -1,12 +1,22 @@
+import { 
+    setCurrentShape, 
+    setIsDrawing, 
+    setIsPanning, 
+    setIsPointingLaser, 
+    setKonvasPostion, 
+    setLaserPoints, 
+    setShapes, 
+    setZoom 
+} from "../../state/app/reducer";
+
 import { KonvaEventObject } from "konva/lib/Node";
-import { Layer, Stage } from "react-konva"
+import { Layer, Line, Stage } from "react-konva"
 import { ShapeProps } from "../../types";
 import { useAppSelector } from "../../state/store";
 import { useDispatch } from "react-redux";
-import { setCurrentShape, setIsDrawing, setIsPanning, setKonvasPostion, setShapes, setZoom } from "../../state/reducer";
 import DrawnShape from "./components/DrawnShape";
 import { Stage as KonvaStage } from 'konva/lib/Stage';
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import getCursor from "./utils/getCurson";
 
 const Canvas = () => {
@@ -14,12 +24,14 @@ const Canvas = () => {
         currentShape,
         isDrawing,
         isPanning,
+        isPointingLaser,
         konvasStagePosX,
         konvasStagePosY,
+        laserPoints,
         selectedToolValue,
         shapes,
         zoom,
-    } = useAppSelector((state) => state);
+    } = useAppSelector((state) => state.app);
 
     const dispatch = useDispatch();
     const stageRef = useRef<KonvaStage | null>(null);
@@ -36,6 +48,11 @@ const Canvas = () => {
         ) {
             lastMousePos.current = { x: event.evt.clientX, y: event.evt.clientY };
             dispatch(setIsPanning(true));
+        }
+
+        if (selectedToolValue === "laser") {
+            dispatch(setLaserPoints([clientX, clientY]));
+            dispatch(setIsPointingLaser(true));
         }
 
         else if (
@@ -67,6 +84,10 @@ const Canvas = () => {
     }
 
     const handleMouseMove = (event: KonvaEventObject<MouseEvent>) => {
+        let { clientX, clientY } = event.evt;
+        clientX = (clientX - konvasStagePosX) / (zoom / 100);
+        clientY = (clientY - konvasStagePosY) / (zoom / 100);
+
         if (isPanning) {
             const dx = event.evt.clientX - lastMousePos.current.x;
             const dy = event.evt.clientY - lastMousePos.current.y;
@@ -78,11 +99,18 @@ const Canvas = () => {
             }));
         }
 
+        else if (isPointingLaser) {
+            const maxLaserLen = 50;
+            let newLaserPoints = [...laserPoints, clientX, clientY];
+            
+            if (newLaserPoints.length > maxLaserLen * 2)
+                newLaserPoints = newLaserPoints.slice(-maxLaserLen * 2);
+
+            dispatch(setLaserPoints(newLaserPoints));
+        }
+
         else if (isDrawing && currentShape) {
-            let { clientX, clientY } = event.evt;
             const { startX, startY, type } = currentShape;
-            clientX = (clientX - konvasStagePosX) / (zoom / 100);
-            clientY = (clientY - konvasStagePosY) / (zoom / 100);
 
             switch (type) {
                 case "arrow":
@@ -133,6 +161,10 @@ const Canvas = () => {
     const handleMouseUp = () => {
         if (isPanning) {
             dispatch(setIsPanning(false));
+        }
+
+        else if (isPointingLaser) {
+            dispatch(setIsPointingLaser(false));
         }
 
         else if (isDrawing && currentShape) {
@@ -191,6 +223,12 @@ const Canvas = () => {
         }
     }
 
+    useEffect(() => {
+        if (!isPointingLaser && laserPoints.length) {
+            dispatch(setLaserPoints([]));
+        }
+    }, [isPointingLaser, laserPoints]);
+
     return (
         <Stage
             ref={stageRef}
@@ -231,6 +269,16 @@ const Canvas = () => {
                         isBeingDrawn={true}
                     />
                 }
+
+                <Line
+                    points={laserPoints}
+                    stroke="red"
+                    strokeWidth={5}
+                    lineCap="round"
+                    lineJoin="round"
+                    perfectDrawEnabled
+                    tension={0.2}
+                />
             </Layer>
         </Stage>
     );

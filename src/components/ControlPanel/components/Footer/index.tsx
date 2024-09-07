@@ -5,7 +5,7 @@ import RedoIcon from '@mui/icons-material/Redo';
 import UndoIcon from '@mui/icons-material/Undo';
 import { useAppSelector } from "../../../../state/store";
 import { useDispatch } from "react-redux";
-import { setRedoShapes, setShapes, setZoom } from "../../../../state/reducer";
+import { setRedoShapes, setShapes, setZoom } from "../../../../state/app/reducer";
 import { useCallback, useEffect } from "react";
 
 const Footer = () => {
@@ -13,7 +13,7 @@ const Footer = () => {
         redoShapes,
         shapes,
         zoom,
-    } = useAppSelector((state) => state);
+    } = useAppSelector((state) => state.app);
 
     const dispatch = useDispatch();
 

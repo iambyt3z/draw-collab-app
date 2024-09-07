@@ -7,10 +7,10 @@ import {
 import tools from "./tools";
 import { useAppDispatch, useAppSelector } from "../../../../../../state/store";
 import { ToolValue } from "../../../../../../types";
-import { setSelectedToolName, setSelectedToolValue } from "../../../../../../state/reducer";
+import { setSelectedToolName, setSelectedToolValue } from "../../../../../../state/app/reducer";
 
 const ToolSelector = () => {
-    const selectedTool = useAppSelector((state) => state.selectedToolValue);
+    const selectedTool = useAppSelector((state) => state.app.selectedToolValue);
     const dispatch = useAppDispatch();
 
     const handleChange = (
