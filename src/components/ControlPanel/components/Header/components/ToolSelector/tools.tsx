@@ -3,15 +3,17 @@ import BackHandIcon from '@mui/icons-material/BackHand';
 import BackHandOutlinedIcon from '@mui/icons-material/BackHandOutlined';
 import CircleIcon from '@mui/icons-material/Circle';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
-import ClearIcon from '@mui/icons-material/Clear';
 import CreateIcon from '@mui/icons-material/Create';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import HighlightAltIcon from '@mui/icons-material/HighlightAlt';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import RectangleIcon from '@mui/icons-material/Rectangle';
 import RectangleOutlinedIcon from '@mui/icons-material/RectangleOutlined';
-import TitleIcon from '@mui/icons-material/Title';
+// import TitleIcon from '@mui/icons-material/Title';
 import { ToolName, ToolValue } from '../../../../../../types';
+import LaserIcon from '../../../../../../assets/LaserIcon';
+import EraserIconOutlined from '../../../../../../assets/EraserIconOutlined';
+import EraserIcon from '../../../../../../assets/EraserIcon';
 
 
 interface Tool {
@@ -75,26 +77,26 @@ const tools: Tool[] = [
         "icon": <CreateOutlinedIcon/>,
         "selectedIcon": <CreateIcon/>,
     },
-    {
-        "name": "Text",
-        "value": "text",
-        "id": "text",
-        "icon": <TitleIcon/>,
-        "selectedIcon": <TitleIcon/>,
-    },
+    // {
+    //     "name": "Text",
+    //     "value": "text",
+    //     "id": "text",
+    //     "icon": <TitleIcon/>,
+    //     "selectedIcon": <TitleIcon/>,
+    // },
     {
         "name": "Eraser",
         "value": "eraser",
         "id": "eraser",
-        "icon": <ClearIcon/>,
-        "selectedIcon": <ClearIcon/>,
+        "icon": <EraserIconOutlined/>,
+        "selectedIcon": <EraserIcon/>,
     },
     {
         "name": "Laser",
         "value": "laser",
         "id": "laser",
-        "icon": <>L</>,
-        "selectedIcon": <>L</>,
+        "icon": <LaserIcon fill="#747474"/>,
+        "selectedIcon": <LaserIcon fill="#1e1e1e"/>,
     },
 ];
 

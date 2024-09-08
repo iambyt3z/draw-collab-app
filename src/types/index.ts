@@ -35,4 +35,5 @@ export interface ShapeProps {
     fill: string;
     stroke: string;
     strokeWidth: number;
+    text: string;
 }

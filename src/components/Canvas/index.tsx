@@ -2,10 +2,10 @@ import {
     setCurrentShape, 
     setIsDrawing, 
     setIsPanning, 
-    setIsPointingLaser, 
+    setIsPointingLaser,
     setKonvasPostion, 
     setLaserPoints, 
-    setShapes, 
+    setShapes,  
     setZoom 
 } from "../../state/app/reducer";
 
@@ -65,18 +65,19 @@ const Canvas = () => {
             dispatch(setIsDrawing(true));
 
             const newShape: ShapeProps = {
-                type: selectedToolValue,
-                centerX: clientX,
-                centerY: clientY,
-                startX: clientX,
-                startY: clientY,
-                width: 0,
-                height: 0,
-                radius: 0,
-                points: [clientX, clientY],
-                fill: 'rgba(0, 0, 0, 0)',
-                stroke: 'black',
-                strokeWidth: 2,
+                "type": selectedToolValue,
+                "centerX": clientX,
+                "centerY": clientY,
+                "startX": clientX,
+                "startY": clientY,
+                "width": 0,
+                "height": 0,
+                "radius": 0,
+                "points": [clientX, clientY],
+                "fill": "rgba(0, 0, 0, 0)",
+                "stroke": 'black',
+                "strokeWidth": 2,
+                "text": "",
             };
 
             dispatch(setCurrentShape(newShape));
@@ -201,7 +202,7 @@ const Canvas = () => {
         }
 
         else if(event.evt.shiftKey) {
-            const direction = event.evt.deltaY > 0 ? 1 : -1;
+            const direction = event.evt.deltaY < 0 ? 1 : -1;
 
             const newPos = {
                 x: stage.x() + direction * 50,
@@ -212,7 +213,7 @@ const Canvas = () => {
         }
 
         else {
-            const direction = event.evt.deltaY > 0 ? 1 : -1;
+            const direction = event.evt.deltaY < 0 ? 1 : -1;
 
             const newPos = {
                 x: stage.x(),
@@ -253,6 +254,7 @@ const Canvas = () => {
                     shapes.map((shapeConfig, index) => {
                         return (
                             <DrawnShape
+                                key={index+1}
                                 config={shapeConfig}
                                 shapeNumber={index+1}
                                 isBeingDrawn={false}

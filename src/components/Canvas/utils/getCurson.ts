@@ -3,7 +3,7 @@ import { ToolValue } from "../../../types";
 const getCursor = (
     selectedToolValue: ToolValue,
     isPanning: boolean,
-    isDrawing: boolean
+    _isDrawing: boolean
 ): string => {
     if (isPanning) {
         return "grabbing";

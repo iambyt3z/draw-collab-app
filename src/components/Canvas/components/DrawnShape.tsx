@@ -1,4 +1,10 @@
-import { Arrow, Circle, Line, Rect } from "react-konva";
+import { 
+    Arrow, 
+    Circle, 
+    Line, 
+    Rect
+} from "react-konva";
+
 import { ShapeProps } from "../../../types";
 
 interface DrawnShapeProps {
