@@ -6,37 +6,68 @@ import {
 } from "react-konva";
 
 import { ShapeProps } from "../../../types";
+import { useAppSelector } from "../../../state/store";
+import { useDispatch } from "react-redux";
+import { setErasedShapes, setShapes } from "../../../state/app/reducer";
+import { KonvaEventObject } from "konva/lib/Node";
+import { Shape } from "konva/lib/Shape";
 
 interface DrawnShapeProps {
     config: ShapeProps;
     isBeingDrawn: boolean;
-    shapeNumber: number;
 }
 
 const beingDrawnOpacity = 0.3;
+const hitStrokeWidth = 20;
 
 const DrawnShape: React.FC<DrawnShapeProps> = ({ 
     config,
-    isBeingDrawn,
-    shapeNumber
+    isBeingDrawn
 }) => {
+    const dispatch = useDispatch();
+
+    const {
+        erasedShapes,
+        selectedToolValue, 
+        shapes 
+    } = useAppSelector((state) => state.app);
+
+    const handleStrokeClick = (
+        event: KonvaEventObject<MouseEvent>, 
+        shapeId: string
+    ) => {
+        const shape = event.target as Shape;
+
+        if (
+            selectedToolValue === "eraser" && 
+            shape.hasStroke()
+        ) {
+            const erasedShape = shapes.filter((shape) => shape.id === shapeId)[0];
+            const newShapes = shapes.filter((shape) => shape.id !== shapeId);
+            dispatch(setShapes(newShapes));
+            dispatch(setErasedShapes([...erasedShapes, erasedShape]));
+        }
+    }
+
     switch(config.type) {
     case "arrow":
         return (
             <Arrow
-                key={`arrow-${shapeNumber}`}
+                key={config.id}
                 opacity={(isBeingDrawn) ? beingDrawnOpacity : 1}
                 points={config.points as number[]}
                 fill={config.fill}
                 stroke={config.stroke}
                 strokeWidth={config.strokeWidth}
+                onClick={(event) => handleStrokeClick(event, config.id)}
+                hitStrokeWidth={hitStrokeWidth}
             />
         );
 
     case "circle":
         return (
             <Circle
-                key={`circle-${shapeNumber}`}
+                key={config.id}
                 x={config.centerX}
                 y={config.centerY}
                 radius={config.radius}
@@ -44,24 +75,28 @@ const DrawnShape: React.FC<DrawnShapeProps> = ({
                 opacity={(isBeingDrawn) ? beingDrawnOpacity : 1}
                 stroke={config.stroke}
                 strokeWidth={config.strokeWidth}
+                onClick={(event) => handleStrokeClick(event, config.id)}
+                hitStrokeWidth={hitStrokeWidth}
             />
         );
 
     case "line":
         return (
             <Line
-                key={`line-${shapeNumber}`}
+                key={config.id}
                 opacity={(isBeingDrawn) ? beingDrawnOpacity : 1}
                 points={config.points as number[]}
                 stroke={config.stroke}
                 strokeWidth={config.strokeWidth}
+                onClick={(event) => handleStrokeClick(event, config.id)}
+                hitStrokeWidth={hitStrokeWidth}
             />
         );
 
     case "pen":
         return (
             <Line
-                key={`pen-${shapeNumber}`}
+                key={config.id}
                 opacity={1}
                 points={config.points as number[]}
                 stroke={config.stroke}
@@ -69,13 +104,15 @@ const DrawnShape: React.FC<DrawnShapeProps> = ({
                 lineCap="round"
                 lineJoin="round"
                 tension={0.1}
+                onClick={(event) => handleStrokeClick(event, config.id)}
+                hitStrokeWidth={hitStrokeWidth}
             />
         );
 
     case "rectangle":
         return (
             <Rect
-                key={`rect-${shapeNumber}`}
+                key={config.id}
                 x={config.startX}
                 y={config.startY}
                 width={config.width}
@@ -84,6 +121,8 @@ const DrawnShape: React.FC<DrawnShapeProps> = ({
                 opacity={(isBeingDrawn) ? beingDrawnOpacity : 1}
                 stroke={config.stroke}
                 strokeWidth={config.strokeWidth}
+                onClick={(event) => handleStrokeClick(event, config.id)}
+                hitStrokeWidth={hitStrokeWidth}
             />
         );
     }

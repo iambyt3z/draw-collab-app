@@ -23,6 +23,7 @@ export type ToolName =
     | "Text"
 
 export interface ShapeProps {
+    id: string;
     type: ToolValue;
     centerX: number;
     centerY: number;

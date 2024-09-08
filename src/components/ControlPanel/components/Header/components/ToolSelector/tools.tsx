@@ -5,7 +5,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import CreateIcon from '@mui/icons-material/Create';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
-import HighlightAltIcon from '@mui/icons-material/HighlightAlt';
+// import HighlightAltIcon from '@mui/icons-material/HighlightAlt';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import RectangleIcon from '@mui/icons-material/Rectangle';
 import RectangleOutlinedIcon from '@mui/icons-material/RectangleOutlined';
@@ -33,14 +33,14 @@ const tools: Tool[] = [
         "icon": <BackHandOutlinedIcon/>,
         "selectedIcon": <BackHandIcon/>,
     },
-    {
-        "name": "Select",
-        "value": "select",
-        "id": "select",
-        "icon": <HighlightAltIcon/>,
-        "selectedIcon": <HighlightAltIcon/>,
-        "dividerAfter": true,
-    },
+    // {
+    //     "name": "Select",
+    //     "value": "select",
+    //     "id": "select",
+    //     "icon": <HighlightAltIcon/>,
+    //     "selectedIcon": <HighlightAltIcon/>,
+    //     "dividerAfter": true,
+    // },
     {
         "name": "Rectangle",
         "value": "rectangle",

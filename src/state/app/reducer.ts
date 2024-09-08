@@ -11,6 +11,10 @@ const rootSlice = createSlice({
             state.currentShape = action.payload;
         },
 
+        "setErasedShapes": (state, action: PayloadAction<ShapeProps[]>) => {
+            state.erasedShapes = action.payload;
+        },
+
         "setIsDrawing": (state, action: PayloadAction<boolean>) => {
             state.isDrawing = action.payload;
         },
@@ -56,6 +60,7 @@ const rootSlice = createSlice({
 
 export const {
     setCurrentShape,
+    setErasedShapes,
     setIsDrawing,
     setIsPanning,
     setIsPointingLaser,

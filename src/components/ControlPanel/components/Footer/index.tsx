@@ -5,11 +5,12 @@ import RedoIcon from '@mui/icons-material/Redo';
 import UndoIcon from '@mui/icons-material/Undo';
 import { useAppSelector } from "../../../../state/store";
 import { useDispatch } from "react-redux";
-import { setRedoShapes, setShapes, setZoom } from "../../../../state/app/reducer";
+import { setErasedShapes, setRedoShapes, setShapes, setZoom } from "../../../../state/app/reducer";
 import { useCallback, useEffect } from "react";
 
 const Footer = () => {
     const {
+        erasedShapes,
         redoShapes,
         shapes,
         zoom,
@@ -18,8 +19,19 @@ const Footer = () => {
     const dispatch = useDispatch();
 
     const handleUndo = useCallback(() => {
-        if (shapes.length === 0) 
+        if (shapes.length === 0 && erasedShapes.length === 0) 
             return;
+
+        else if (erasedShapes.length !== 0) {
+            const newErasedShapes = [...erasedShapes];
+            const lastErasedShape = newErasedShapes.pop();
+            dispatch(setErasedShapes(newErasedShapes));
+
+            if (lastErasedShape !== undefined)
+                dispatch(setShapes([...shapes, lastErasedShape]));
+
+            return ;
+        }
 
         const newShapes = [...shapes];
         const lastShape = newShapes.pop();
@@ -135,7 +147,7 @@ const Footer = () => {
                 sx={{ "pointerEvents": "all" }}
             >
                 <IconButton
-                    disabled={(shapes.length === 0)}
+                    disabled={(shapes.length === 0 && erasedShapes.length === 0)}
                     onClick={handleUndo}
                     sx={(theme) => ({
                         "&.Mui-disabled": { "backgroundColor": theme.palette.grey[100] },

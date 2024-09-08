@@ -11,7 +11,11 @@ const getCursor = (
 
     else if (selectedToolValue === "hand" && !isPanning) {
         return "grab";
-    } 
+    }
+
+    else if (selectedToolValue === "eraser") {
+        return `url('https://icons.iconarchive.com/icons/bootstrap/bootstrap/24/Bootstrap-eraser-icon.png') 12 12, auto`;
+    }
 
     else if (
         selectedToolValue === "arrow" ||

@@ -2,6 +2,7 @@ import { ShapeProps, ToolName, ToolValue } from "../../types";
 
 interface InitialRootState {
     currentShape: ShapeProps | null;
+    erasedShapes: ShapeProps[];
     isDrawing: boolean;
     isPanning: boolean;
     isPointingLaser: boolean;
@@ -17,6 +18,7 @@ interface InitialRootState {
 
 const initialRootState: InitialRootState = {
     "currentShape": null,
+    "erasedShapes": [],
     "isDrawing": false,
     "isPanning": false,
     "isPointingLaser": false,

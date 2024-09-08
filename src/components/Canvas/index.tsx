@@ -65,6 +65,7 @@ const Canvas = () => {
             dispatch(setIsDrawing(true));
 
             const newShape: ShapeProps = {
+                "id": `${selectedToolValue}-${shapes.length + 1}`,
                 "type": selectedToolValue,
                 "centerX": clientX,
                 "centerY": clientY,
@@ -251,12 +252,11 @@ const Canvas = () => {
         >
             <Layer>
                 {
-                    shapes.map((shapeConfig, index) => {
+                    shapes.map((shapeConfig) => {
                         return (
                             <DrawnShape
-                                key={index+1}
+                                key={shapeConfig.id}
                                 config={shapeConfig}
-                                shapeNumber={index+1}
                                 isBeingDrawn={false}
                             />
                         );
@@ -267,7 +267,6 @@ const Canvas = () => {
                     (currentShape !== null) &&
                     <DrawnShape
                         config={currentShape}
-                        shapeNumber={0}
                         isBeingDrawn={true}
                     />
                 }
