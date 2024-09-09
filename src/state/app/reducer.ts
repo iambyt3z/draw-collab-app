@@ -11,6 +11,10 @@ const rootSlice = createSlice({
             state.currentShape = action.payload;
         },
 
+        "setDrawingId": (state, action: PayloadAction<string>) => {
+            state.drawingId = action.payload;
+        },
+
         "setErasedShapes": (state, action: PayloadAction<ShapeProps[]>) => {
             state.erasedShapes = action.payload;
         },
@@ -40,6 +44,10 @@ const rootSlice = createSlice({
             state.redoShapes = action.payload;
         },
 
+        "setRoomId": (state, action: PayloadAction<string>) => {
+            state.roomId = action.payload;
+        },
+
         "setSelectedToolName": (state, action: PayloadAction<ToolName>) => {
             state.selectedToolName = action.payload;
         },
@@ -60,6 +68,7 @@ const rootSlice = createSlice({
 
 export const {
     setCurrentShape,
+    setDrawingId,
     setErasedShapes,
     setIsDrawing,
     setIsPanning,
@@ -67,6 +76,7 @@ export const {
     setKonvasPostion,
     setLaserPoints,
     setRedoShapes,
+    setRoomId,
     setSelectedToolName,
     setSelectedToolValue,
     setShapes,

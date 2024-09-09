@@ -2,6 +2,7 @@ import { ShapeProps, ToolName, ToolValue } from "../../types";
 
 interface InitialRootState {
     currentShape: ShapeProps | null;
+    drawingId: string;
     erasedShapes: ShapeProps[];
     isDrawing: boolean;
     isPanning: boolean;
@@ -10,6 +11,7 @@ interface InitialRootState {
     konvasStagePosY: number;
     laserPoints: number[];
     redoShapes: ShapeProps[];
+    roomId: string;
     selectedToolName: ToolName;
     selectedToolValue: ToolValue;
     shapes: ShapeProps[];
@@ -18,6 +20,7 @@ interface InitialRootState {
 
 const initialRootState: InitialRootState = {
     "currentShape": null,
+    "drawingId": "",
     "erasedShapes": [],
     "isDrawing": false,
     "isPanning": false,
@@ -26,6 +29,7 @@ const initialRootState: InitialRootState = {
     "konvasStagePosY": 0,
     "laserPoints": [],
     "redoShapes": [],
+    "roomId": "",
     "selectedToolName": "Rectangle",
     "selectedToolValue": "rectangle",
     "shapes": [],

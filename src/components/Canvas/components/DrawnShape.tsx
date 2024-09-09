@@ -10,7 +10,6 @@ import { useAppSelector } from "../../../state/store";
 import { useDispatch } from "react-redux";
 import { setErasedShapes, setShapes } from "../../../state/app/reducer";
 import { KonvaEventObject } from "konva/lib/Node";
-import { Shape } from "konva/lib/Shape";
 
 interface DrawnShapeProps {
     config: ShapeProps;
@@ -33,15 +32,10 @@ const DrawnShape: React.FC<DrawnShapeProps> = ({
     } = useAppSelector((state) => state.app);
 
     const handleStrokeClick = (
-        event: KonvaEventObject<MouseEvent>, 
+        _event: KonvaEventObject<MouseEvent>, 
         shapeId: string
     ) => {
-        const shape = event.target as Shape;
-
-        if (
-            selectedToolValue === "eraser" && 
-            shape.hasStroke()
-        ) {
+        if (selectedToolValue === "eraser") {
             const erasedShape = shapes.filter((shape) => shape.id === shapeId)[0];
             const newShapes = shapes.filter((shape) => shape.id !== shapeId);
             dispatch(setShapes(newShapes));
