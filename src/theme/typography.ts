@@ -1,6 +1,4 @@
 import { CSSProperties, TypographyOptions } from "@mui/material/styles/createTypography";
-import { SimplePaletteColorOptions } from "@mui/material";
-import palette from "./palette";
 
 declare module "@mui/material/Typography" {
     interface TypographyPropsVariantOverrides {

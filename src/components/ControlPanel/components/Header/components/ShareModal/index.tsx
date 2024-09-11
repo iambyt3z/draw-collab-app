@@ -77,8 +77,6 @@ const ShareModel: React.FC<ShareModelProps> = ({
                         const collabRoomMetadataBase64 = btoa(collabRoomMetadataStringified);
                         const collabRoomLink = window.location.origin + "/collab-room/" + collabRoomMetadataBase64;
 
-                        console.log("collabRoomLink", collabRoomLink);
-
                         dispatch(setCollabRoomLink(collabRoomLink));
                     });
             })

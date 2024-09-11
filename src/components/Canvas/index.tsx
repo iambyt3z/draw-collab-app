@@ -1,3 +1,4 @@
+import { DbCollabRoomData, ShapeProps } from "../../types";
 import {
     Layer,
     Line,
@@ -24,10 +25,11 @@ import { useEffect, useRef } from "react";
 import DrawnShape from "./components/DrawnShape";
 import { KonvaEventObject } from "konva/lib/Node";
 import { Stage as KonvaStage } from "konva/lib/Stage";
-import { ShapeProps } from "../../types";
 import decrypt from "../../utils/decrypt";
+import encrypt from "../../utils/encrypt";
 import firebase from "../../firebase";
 import getCursor from "./utils/getCurson";
+import { setCollabRoomShapes } from "../../state/collabRoom/reducer";
 
 const Canvas = () => {
     const {
@@ -198,18 +200,18 @@ const Canvas = () => {
                 return ;
             }
 
-            // const dbRef = ref(firebase.db);
-            // const dbUpdates: { [key: string]: string } = {};
+            const newCollabRoomShapes = [...collabRoomShapes, currentShape];
+            const newCollabRoomData: DbCollabRoomData = {
+                "shapes": newCollabRoomShapes
+            };
 
-            // const newDbShapes = [...collabRoomShapes, currentShape];
-
-            // const updatedCollabRoomData = { "shapes": newDbShapes };
-            // const updatedCollabRoomDataStrigified = JSON.stringify(updatedCollabRoomData);
-            // const updatedCollabRoomDatabase64 = btoa(updatedCollabRoomDataStrigified);
-
-            // dbUpdates[`rooms/${collabRoomId}`] = updatedCollabRoomDatabase64;
-
-            // update(dbRef, dbUpdates);
+            encrypt(newCollabRoomData, collabRoomKey)
+                .then((encryptedData) => {
+                    const updates: {[key: string]: string} = {};
+                    updates[`/rooms/${collabRoomId}`] = encryptedData;
+                    update(ref(firebase.db), updates);
+                })
+                .catch((error) => console.error(error));
         }
     };
 
@@ -268,30 +270,21 @@ const Canvas = () => {
         }
     }, [isPointingLaser, laserPoints]);
 
-    // useEffect(() => {
-    //     const query = ref(firebase.db, `rooms/${collabRoomId}`);
+    useEffect(() => {
+        const query = ref(firebase.db, `rooms/${collabRoomId}`);
 
-    //     return onValue(query, (snapshot) => {
-    //         if (snapshot.exists()) {
-    //             const snapshotVal = snapshot.val();
+        return onValue(query, (snapshot) => {
+            if (snapshot.exists()) {
+                const snapshotVal = snapshot.val();
 
-    //             decrypt(snapshotVal, collabRoomKey)
-    //                 .then((collabRoomData) => {
-    //                     console.log("collabRoomData", collabRoomData);
-
-    //                     // const collabRoomShapes = collabRoomData.shapes as ShapeProps[];
-
-    //                     // dispatch(setCollabRoomShapes(collabRoomShapes));
-    //                     // dispatch(setCollabRoomId(collabRoomId));
-    //                 });
-
-    //             // const dbShapes = getShapes(snapshotVal);
-
-    //             // if (dbShapes !== null)
-    //             //     dispatch(setCollabRoomShapes(dbShapes as any as ShapeProps[]));
-    //         }
-    //     });
-    // }, []);
+                decrypt(snapshotVal, collabRoomKey)
+                    .then((collabRoomData) => {
+                        const collabRoomShapes = collabRoomData.shapes as ShapeProps[];
+                        dispatch(setCollabRoomShapes(collabRoomShapes));
+                    });
+            }
+        });
+    }, []);
 
     return (
         <Stage
