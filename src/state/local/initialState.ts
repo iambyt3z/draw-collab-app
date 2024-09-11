@@ -1,6 +1,10 @@
-import { ShapeProps, ToolName, ToolValue } from "../../types";
+import {
+    ShapeProps,
+    ToolName,
+    ToolValue
+} from "../../types";
 
-interface InitialRootState {
+interface InitialLocalState {
     currentShape: ShapeProps | null;
     drawingId: string;
     erasedShapes: ShapeProps[];
@@ -11,14 +15,13 @@ interface InitialRootState {
     konvasStagePosY: number;
     laserPoints: number[];
     redoShapes: ShapeProps[];
-    roomId: string;
     selectedToolName: ToolName;
     selectedToolValue: ToolValue;
     shapes: ShapeProps[];
     zoom: number;
 }
 
-const initialRootState: InitialRootState = {
+const initialLocalState: InitialLocalState = {
     "currentShape": null,
     "drawingId": "",
     "erasedShapes": [],
@@ -29,11 +32,10 @@ const initialRootState: InitialRootState = {
     "konvasStagePosY": 0,
     "laserPoints": [],
     "redoShapes": [],
-    "roomId": "",
     "selectedToolName": "Rectangle",
     "selectedToolValue": "rectangle",
     "shapes": [],
     "zoom": 100,
 };
 
-export default initialRootState;
+export default initialLocalState;

@@ -5,6 +5,6 @@ const EraserIconOutlined = () => {
             <path fill="#747474" d="M9 21H21" stroke="#747474" strokeWidth="1.5" strokeLinecap="round"/>
         </svg>
     );
-}
+};
 
 export default EraserIconOutlined;

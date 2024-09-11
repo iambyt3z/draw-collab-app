@@ -1,12 +1,23 @@
-import { Box, Chip, IconButton, Stack } from "@mui/material";
-import RemoveIcon from '@mui/icons-material/Remove';
-import AddIcon from '@mui/icons-material/Add';
-import RedoIcon from '@mui/icons-material/Redo';
-import UndoIcon from '@mui/icons-material/Undo';
+import {
+    Box,
+    Chip,
+    IconButton,
+    Stack
+} from "@mui/material";
+import {
+    setErasedShapes,
+    setRedoShapes,
+    setShapes,
+    setZoom
+} from "../../../../state/local/reducer";
+import { useCallback, useEffect } from "react";
+
+import AddIcon from "@mui/icons-material/Add";
+import RedoIcon from "@mui/icons-material/Redo";
+import RemoveIcon from "@mui/icons-material/Remove";
+import UndoIcon from "@mui/icons-material/Undo";
 import { useAppSelector } from "../../../../state/store";
 import { useDispatch } from "react-redux";
-import { setErasedShapes, setRedoShapes, setShapes, setZoom } from "../../../../state/app/reducer";
-import { useCallback, useEffect } from "react";
 
 const Footer = () => {
     const {
@@ -14,7 +25,7 @@ const Footer = () => {
         redoShapes,
         shapes,
         zoom,
-    } = useAppSelector((state) => state.app);
+    } = useAppSelector((state) => state.local);
 
     const dispatch = useDispatch();
 
@@ -73,7 +84,7 @@ const Footer = () => {
                 event.preventDefault();
                 handleRedo();
             }
-        }
+        };
 
         window.addEventListener("keydown", handleKeyDown);
 
@@ -83,18 +94,18 @@ const Footer = () => {
     }, [handleUndo, handleRedo]);
 
     const handleZoomIncrease = () => {
-        if(zoom === 500)
+        if (zoom === 500)
             return ;
 
         dispatch(setZoom(zoom + 10));
-    }
+    };
 
     const handleZoomDecrease = () => {
-        if(zoom === 10)
+        if (zoom === 10)
             return ;
 
         dispatch(setZoom(zoom - 10));
-    }
+    };
 
     return (
         <Box
@@ -172,6 +183,6 @@ const Footer = () => {
             </Stack>
         </Box>
     );
-}
+};
 
 export default Footer;

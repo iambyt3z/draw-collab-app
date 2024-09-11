@@ -1,22 +1,32 @@
-import { 
-    setCurrentShape, 
-    setIsDrawing, 
-    setIsPanning, 
+import {
+    Layer,
+    Line,
+    Stage
+} from "react-konva";
+import {
+    onValue,
+    ref,
+    update
+} from "firebase/database";
+import {
+    setCurrentShape,
+    setIsDrawing,
+    setIsPanning,
     setIsPointingLaser,
-    setKonvasPostion, 
-    setLaserPoints, 
-    setShapes,  
-    setZoom 
-} from "../../state/app/reducer";
-
-import { KonvaEventObject } from "konva/lib/Node";
-import { Layer, Line, Stage } from "react-konva"
-import { ShapeProps } from "../../types";
-import { useAppSelector } from "../../state/store";
-import { useDispatch } from "react-redux";
-import DrawnShape from "./components/DrawnShape";
-import { Stage as KonvaStage } from 'konva/lib/Stage';
+    setKonvasPostion,
+    setLaserPoints,
+    setShapes,
+    setZoom
+} from "../../state/local/reducer";
+import { useAppDispatch, useAppSelector } from "../../state/store";
 import { useEffect, useRef } from "react";
+
+import DrawnShape from "./components/DrawnShape";
+import { KonvaEventObject } from "konva/lib/Node";
+import { Stage as KonvaStage } from "konva/lib/Stage";
+import { ShapeProps } from "../../types";
+import decrypt from "../../utils/decrypt";
+import firebase from "../../firebase";
 import getCursor from "./utils/getCurson";
 
 const Canvas = () => {
@@ -31,11 +41,17 @@ const Canvas = () => {
         selectedToolValue,
         shapes,
         zoom,
-    } = useAppSelector((state) => state.app);
+    } = useAppSelector((state) => state.local);
 
-    const dispatch = useDispatch();
+    const {
+        collabRoomId,
+        collabRoomKey,
+        collabRoomShapes,
+    } = useAppSelector((state) => state.collabRoom);
+
+    const dispatch = useAppDispatch();
     const stageRef = useRef<KonvaStage | null>(null);
-    const lastMousePos = useRef({ x: 0, y: 0 });
+    const lastMousePos = useRef({ "x": 0, "y": 0 });
 
     const handleMouseDown = (event: KonvaEventObject<MouseEvent>) => {
         let { clientX, clientY } = event.evt;
@@ -46,7 +62,7 @@ const Canvas = () => {
             selectedToolValue === "hand" ||
             event.evt.button === 1
         ) {
-            lastMousePos.current = { x: event.evt.clientX, y: event.evt.clientY };
+            lastMousePos.current = { "x": event.evt.clientX, "y": event.evt.clientY };
             dispatch(setIsPanning(true));
         }
 
@@ -62,28 +78,32 @@ const Canvas = () => {
             selectedToolValue === "pen" ||
             selectedToolValue === "rectangle"
         ) {
-            dispatch(setIsDrawing(true));
+            const neShapeId =
+                (collabRoomId === "")
+                    ? `shape-${shapes.length + 1}`
+                    : `shape-${collabRoomShapes?.length + 1}`;
 
             const newShape: ShapeProps = {
-                "id": `${selectedToolValue}-${shapes.length + 1}`,
-                "type": selectedToolValue,
                 "centerX": clientX,
                 "centerY": clientY,
+                "fill": "rgba(0, 0, 0, 0)",
+                "height": 0,
+                "id": neShapeId,
+                "points": [clientX, clientY],
+                "radius": 0,
                 "startX": clientX,
                 "startY": clientY,
-                "width": 0,
-                "height": 0,
-                "radius": 0,
-                "points": [clientX, clientY],
-                "fill": "rgba(0, 0, 0, 0)",
                 "stroke": 'black',
                 "strokeWidth": 2,
                 "text": "",
+                "type": selectedToolValue,
+                "width": 0
             };
 
+            dispatch(setIsDrawing(true));
             dispatch(setCurrentShape(newShape));
         }
-    }
+    };
 
     const handleMouseMove = (event: KonvaEventObject<MouseEvent>) => {
         let { clientX, clientY } = event.evt;
@@ -93,11 +113,11 @@ const Canvas = () => {
         if (isPanning) {
             const dx = event.evt.clientX - lastMousePos.current.x;
             const dy = event.evt.clientY - lastMousePos.current.y;
-            lastMousePos.current = { x: event.evt.clientX, y: event.evt.clientY };
+            lastMousePos.current = { "x": event.evt.clientX, "y": event.evt.clientY };
 
             dispatch(setKonvasPostion({
-                x: konvasStagePosX + dx,
-                y: konvasStagePosY + dy,
+                "x": konvasStagePosX + dx,
+                "y": konvasStagePosY + dy,
             }));
         }
 
@@ -115,50 +135,50 @@ const Canvas = () => {
             const { startX, startY, type } = currentShape;
 
             switch (type) {
-                case "arrow":
-                case "line":
-                    dispatch(setCurrentShape({
-                        ...currentShape,
-                        centerX: (startX + clientX) / 2,
-                        centerY: (startY + clientY) / 2,
-                        points: [startX, startY, clientX, clientY],
-                    }));
+            case "arrow":
+            case "line":
+                dispatch(setCurrentShape({
+                    ...currentShape,
+                    "centerX": (startX + clientX) / 2,
+                    "centerY": (startY + clientY) / 2,
+                    "points": [startX, startY, clientX, clientY],
+                }));
 
-                    break;
+                break;
                 
-                case "circle":
-                    const radius = Math.sqrt(Math.pow(clientX - startX, 2) + Math.pow(clientY - startY, 2)) / 2;
-                    dispatch(setCurrentShape({
-                        ...currentShape,
-                        centerX: (startX + clientX) / 2,
-                        centerY: (startY + clientY) / 2,
-                        radius,
-                    }));
+            case "circle":
+                const radius = Math.sqrt(Math.pow(clientX - startX, 2) + Math.pow(clientY - startY, 2)) / 2;
+                dispatch(setCurrentShape({
+                    ...currentShape,
+                    "centerX": (startX + clientX) / 2,
+                    "centerY": (startY + clientY) / 2,
+                    radius,
+                }));
 
-                    break;
+                break;
 
-                case "pen":
-                    dispatch(setCurrentShape({
-                        ...currentShape,
-                        points: [...currentShape.points as number[], clientX, clientY]
-                    }));
+            case "pen":
+                dispatch(setCurrentShape({
+                    ...currentShape,
+                    "points": [...currentShape.points as number[], clientX, clientY]
+                }));
 
-                    break;
+                break;
                 
-                case "rectangle":
-                    dispatch(setCurrentShape({
-                        ...currentShape,
-                        width: clientX - startX,
-                        height: clientY - startY,
-                    }));
+            case "rectangle":
+                dispatch(setCurrentShape({
+                    ...currentShape,
+                    "height": clientY - startY,
+                    "width": clientX - startX,
+                }));
 
-                    break;
+                break;
 
-                default:
-                    break;
+            default:
+                break;
             }
         }
-    }
+    };
     
     const handleMouseUp = () => {
         if (isPanning) {
@@ -170,11 +190,28 @@ const Canvas = () => {
         }
 
         else if (isDrawing && currentShape) {
-            dispatch(setShapes([...shapes, currentShape]));
             dispatch(setCurrentShape(null));
             dispatch(setIsDrawing(false));
+
+            if (collabRoomId === "") {
+                dispatch(setShapes([...shapes, currentShape]));
+                return ;
+            }
+
+            // const dbRef = ref(firebase.db);
+            // const dbUpdates: { [key: string]: string } = {};
+
+            // const newDbShapes = [...collabRoomShapes, currentShape];
+
+            // const updatedCollabRoomData = { "shapes": newDbShapes };
+            // const updatedCollabRoomDataStrigified = JSON.stringify(updatedCollabRoomData);
+            // const updatedCollabRoomDatabase64 = btoa(updatedCollabRoomDataStrigified);
+
+            // dbUpdates[`rooms/${collabRoomId}`] = updatedCollabRoomDatabase64;
+
+            // update(dbRef, dbUpdates);
         }
-    }
+    };
 
     const handleWheel = (event: KonvaEventObject<WheelEvent>) => {
         event.evt.preventDefault();
@@ -182,32 +219,32 @@ const Canvas = () => {
         const stage = stageRef.current;
         if (!stage) return;
 
-        if(event.evt.ctrlKey) {
+        if (event.evt.ctrlKey) {
             const oldScale = stage.scaleX();
             const scaleBy = 1.1;
             const newScale = event.evt.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy;
             const clampedScale = Math.min(Math.max(newScale, 0.1), 5.0);
 
             const mousePointTo = {
-                x: stage.getPointerPosition()!.x / oldScale - stage.x() / oldScale,
-                y: stage.getPointerPosition()!.y / oldScale - stage.y() / oldScale,
+                "x": stage.getPointerPosition()!.x / oldScale - stage.x() / oldScale,
+                "y": stage.getPointerPosition()!.y / oldScale - stage.y() / oldScale,
             };
 
             const newPos = {
-                x: -(mousePointTo.x - stage.getPointerPosition()!.x / clampedScale) * clampedScale,
-                y: -(mousePointTo.y - stage.getPointerPosition()!.y / clampedScale) * clampedScale,
+                "x": -(mousePointTo.x - stage.getPointerPosition()!.x / clampedScale) * clampedScale,
+                "y": -(mousePointTo.y - stage.getPointerPosition()!.y / clampedScale) * clampedScale,
             };
 
             dispatch(setZoom(Math.round(clampedScale * 100)));
             dispatch(setKonvasPostion(newPos));
         }
 
-        else if(event.evt.shiftKey) {
+        else if (event.evt.shiftKey) {
             const direction = event.evt.deltaY < 0 ? 1 : -1;
 
             const newPos = {
-                x: stage.x() + direction * 50,
-                y: stage.y(),
+                "x": stage.x() + direction * 50,
+                "y": stage.y(),
             };
 
             dispatch(setKonvasPostion(newPos));
@@ -217,19 +254,44 @@ const Canvas = () => {
             const direction = event.evt.deltaY < 0 ? 1 : -1;
 
             const newPos = {
-                x: stage.x(),
-                y: stage.y() + direction * 50,
+                "x": stage.x(),
+                "y": stage.y() + direction * 50,
             };
 
             dispatch(setKonvasPostion(newPos));
         }
-    }
+    };
 
     useEffect(() => {
         if (!isPointingLaser && laserPoints.length) {
             dispatch(setLaserPoints([]));
         }
     }, [isPointingLaser, laserPoints]);
+
+    // useEffect(() => {
+    //     const query = ref(firebase.db, `rooms/${collabRoomId}`);
+
+    //     return onValue(query, (snapshot) => {
+    //         if (snapshot.exists()) {
+    //             const snapshotVal = snapshot.val();
+
+    //             decrypt(snapshotVal, collabRoomKey)
+    //                 .then((collabRoomData) => {
+    //                     console.log("collabRoomData", collabRoomData);
+
+    //                     // const collabRoomShapes = collabRoomData.shapes as ShapeProps[];
+
+    //                     // dispatch(setCollabRoomShapes(collabRoomShapes));
+    //                     // dispatch(setCollabRoomId(collabRoomId));
+    //                 });
+
+    //             // const dbShapes = getShapes(snapshotVal);
+
+    //             // if (dbShapes !== null)
+    //             //     dispatch(setCollabRoomShapes(dbShapes as any as ShapeProps[]));
+    //         }
+    //     });
+    // }, []);
 
     return (
         <Stage
@@ -252,7 +314,10 @@ const Canvas = () => {
         >
             <Layer>
                 {
-                    shapes.map((shapeConfig) => {
+                    ((collabRoomId !== "")
+                        ? collabRoomShapes
+                        : shapes
+                    ).map((shapeConfig) => {
                         return (
                             <DrawnShape
                                 key={shapeConfig.id}
@@ -267,7 +332,7 @@ const Canvas = () => {
                     (currentShape !== null) &&
                     <DrawnShape
                         config={currentShape}
-                        isBeingDrawn={true}
+                        isBeingDrawn
                     />
                 }
 
@@ -283,6 +348,6 @@ const Canvas = () => {
             </Layer>
         </Stage>
     );
-}
+};
 
 export default Canvas;

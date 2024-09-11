@@ -1,10 +1,13 @@
-import { configureStore } from "@reduxjs/toolkit";
-import appReducer from "./app/reducer";
 import { useDispatch, useSelector } from "react-redux";
 
+import collabRoomReducer from "./collabRoom/reducer";
+import { configureStore } from "@reduxjs/toolkit";
+import localReducer from "./local/reducer";
+
 const store = configureStore({
-    reducer: {
-        app: appReducer
+    "reducer": {
+        "collabRoom": collabRoomReducer,
+        "local": localReducer,
     }
 });
 

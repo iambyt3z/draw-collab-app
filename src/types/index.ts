@@ -38,3 +38,12 @@ export interface ShapeProps {
     strokeWidth: number;
     text: string;
 }
+
+export interface CollabRoomMetadata {
+    collabRoomId: string;
+    collabRoomKey: string;
+}
+
+export interface DbCollabRoomData {
+    shapes: ShapeProps[];
+}

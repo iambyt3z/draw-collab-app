@@ -28,6 +28,6 @@ const getCursor = (
     }
 
     return "default";
-}
+};
 
 export default getCursor;

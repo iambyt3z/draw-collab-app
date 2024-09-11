@@ -14,6 +14,6 @@ const LaserIcon: React.FC<{ fill: string; }> = ({ fill }) => {
             />
         </svg>
     );
-}
+};
 
 export default LaserIcon;

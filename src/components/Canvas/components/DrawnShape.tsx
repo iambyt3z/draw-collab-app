@@ -1,15 +1,15 @@
-import { 
-    Arrow, 
-    Circle, 
-    Line, 
+import {
+    Arrow,
+    Circle,
+    Line,
     Rect
 } from "react-konva";
+import { setErasedShapes, setShapes } from "../../../state/local/reducer";
 
+import { KonvaEventObject } from "konva/lib/Node";
 import { ShapeProps } from "../../../types";
 import { useAppSelector } from "../../../state/store";
 import { useDispatch } from "react-redux";
-import { setErasedShapes, setShapes } from "../../../state/app/reducer";
-import { KonvaEventObject } from "konva/lib/Node";
 
 interface DrawnShapeProps {
     config: ShapeProps;
@@ -29,7 +29,7 @@ const DrawnShape: React.FC<DrawnShapeProps> = ({
         erasedShapes,
         selectedToolValue, 
         shapes 
-    } = useAppSelector((state) => state.app);
+    } = useAppSelector((state) => state.local);
 
     const handleStrokeClick = (
         _event: KonvaEventObject<MouseEvent>, 
@@ -41,9 +41,9 @@ const DrawnShape: React.FC<DrawnShapeProps> = ({
             dispatch(setShapes(newShapes));
             dispatch(setErasedShapes([...erasedShapes, erasedShape]));
         }
-    }
+    };
 
-    switch(config.type) {
+    switch (config.type) {
     case "arrow":
         return (
             <Arrow

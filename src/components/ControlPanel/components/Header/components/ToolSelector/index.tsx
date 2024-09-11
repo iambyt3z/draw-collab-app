@@ -1,16 +1,16 @@
 import {
-    ToggleButton, 
-    ToggleButtonGroup, 
-    Tooltip 
+    ToggleButton,
+    ToggleButtonGroup,
+    Tooltip
 } from "@mui/material";
-
-import tools from "./tools";
+import { setSelectedToolName, setSelectedToolValue } from "../../../../../../state/local/reducer";
 import { useAppDispatch, useAppSelector } from "../../../../../../state/store";
+
 import { ToolValue } from "../../../../../../types";
-import { setSelectedToolName, setSelectedToolValue } from "../../../../../../state/app/reducer";
+import tools from "./tools";
 
 const ToolSelector = () => {
-    const selectedTool = useAppSelector((state) => state.app.selectedToolValue);
+    const selectedTool = useAppSelector((state) => state.local.selectedToolValue);
     const dispatch = useAppDispatch();
 
     const handleChange = (
@@ -31,8 +31,8 @@ const ToolSelector = () => {
             value={selectedTool}
             onChange={handleChange}
             sx={{
-                "boxShadow": "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                 "borderRadius": 2,
+                "boxShadow": "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                 "pointerEvents": "all",
             }}
         >
@@ -44,11 +44,11 @@ const ToolSelector = () => {
                                 value={tool.value}
                                 sx={{ "border": 0 }}
                             >
-                                    {
-                                        (tool.value === selectedTool)
-                                            ? <>{tool.selectedIcon}</>
-                                            : <>{tool.icon}</>
-                                    }
+                                {
+                                    (tool.value === selectedTool)
+                                        ? <>{tool.selectedIcon}</>
+                                        : <>{tool.icon}</>
+                                }
                                 
                             </ToggleButton>
                         </Tooltip>
@@ -56,7 +56,7 @@ const ToolSelector = () => {
                 })
             }
         </ToggleButtonGroup>
-    )
-}
+    );
+};
 
 export default ToolSelector;

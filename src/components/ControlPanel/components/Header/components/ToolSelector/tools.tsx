@@ -1,20 +1,18 @@
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-import BackHandIcon from '@mui/icons-material/BackHand';
-import BackHandOutlinedIcon from '@mui/icons-material/BackHandOutlined';
-import CircleIcon from '@mui/icons-material/Circle';
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
-import CreateIcon from '@mui/icons-material/Create';
-import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
-// import HighlightAltIcon from '@mui/icons-material/HighlightAlt';
-import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
-import RectangleIcon from '@mui/icons-material/Rectangle';
-import RectangleOutlinedIcon from '@mui/icons-material/RectangleOutlined';
-// import TitleIcon from '@mui/icons-material/Title';
-import { ToolName, ToolValue } from '../../../../../../types';
-import LaserIcon from '../../../../../../assets/LaserIcon';
-import EraserIconOutlined from '../../../../../../assets/EraserIconOutlined';
-import EraserIcon from '../../../../../../assets/EraserIcon';
+import { ToolName, ToolValue } from "../../../../../../types";
 
+import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
+import BackHandIcon from "@mui/icons-material/BackHand";
+import BackHandOutlinedIcon from "@mui/icons-material/BackHandOutlined";
+import CircleIcon from "@mui/icons-material/Circle";
+import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
+import CreateIcon from "@mui/icons-material/Create";
+import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
+import EraserIcon from "../../../../../../assets/EraserIcon";
+import EraserIconOutlined from "../../../../../../assets/EraserIconOutlined";
+import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
+import LaserIcon from "../../../../../../assets/LaserIcon";
+import RectangleIcon from "@mui/icons-material/Rectangle";
+import RectangleOutlinedIcon from "@mui/icons-material/RectangleOutlined";
 
 interface Tool {
     name: ToolName;
@@ -27,11 +25,11 @@ interface Tool {
 
 const tools: Tool[] = [
     {
-        "name": "Hand",
-        "value": "hand",
-        "id": "hand",
         "icon": <BackHandOutlinedIcon/>,
+        "id": "hand",
+        "name": "Hand",
         "selectedIcon": <BackHandIcon/>,
+        "value": "hand",
     },
     // {
     //     "name": "Select",
@@ -42,40 +40,40 @@ const tools: Tool[] = [
     //     "dividerAfter": true,
     // },
     {
-        "name": "Rectangle",
-        "value": "rectangle",
-        "id": "rectangle",
         "icon": <RectangleOutlinedIcon/>,
+        "id": "rectangle",
+        "name": "Rectangle",
         "selectedIcon": <RectangleIcon/>,
+        "value": "rectangle",
     },
     {
-        "name": "Circle",
-        "value": "circle",
-        "id": "circle",
         "icon": <CircleOutlinedIcon/>,
+        "id": "circle",
+        "name": "Circle",
         "selectedIcon": <CircleIcon/>,
+        "value": "circle",
     },
     {
-        "name": "Arrow",
-        "value": "arrow",
-        "id": "arrow",
         "icon": <ArrowRightAltIcon/>,
+        "id": "arrow",
+        "name": "Arrow",
         "selectedIcon": <ArrowRightAltIcon/>,
+        "value": "arrow",
     },
     {
-        "name": "Line",
-        "value": "line",
-        "id": "line",
-        "icon": <HorizontalRuleIcon/>,
-        "selectedIcon": <HorizontalRuleIcon/>,
         "dividerAfter": true,
+        "icon": <HorizontalRuleIcon/>,
+        "id": "line",
+        "name": "Line",
+        "selectedIcon": <HorizontalRuleIcon/>,
+        "value": "line",
     },
     {
-        "name": "Pen",
-        "value": "pen",
-        "id": "pen",
         "icon": <CreateOutlinedIcon/>,
+        "id": "pen",
+        "name": "Pen",
         "selectedIcon": <CreateIcon/>,
+        "value": "pen",
     },
     // {
     //     "name": "Text",
@@ -85,18 +83,18 @@ const tools: Tool[] = [
     //     "selectedIcon": <TitleIcon/>,
     // },
     {
-        "name": "Eraser",
-        "value": "eraser",
-        "id": "eraser",
         "icon": <EraserIconOutlined/>,
+        "id": "eraser",
+        "name": "Eraser",
         "selectedIcon": <EraserIcon/>,
+        "value": "eraser",
     },
     {
-        "name": "Laser",
-        "value": "laser",
-        "id": "laser",
         "icon": <LaserIcon fill="#747474"/>,
+        "id": "laser",
+        "name": "Laser",
         "selectedIcon": <LaserIcon fill="#1e1e1e"/>,
+        "value": "laser",
     },
 ];
 

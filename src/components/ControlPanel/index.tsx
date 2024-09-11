@@ -1,6 +1,6 @@
-import { Box, Grid2 } from "@mui/material"
-import Header from "./components/Header";
+import { Box, Grid2 } from "@mui/material";
 import Footer from "./components/Footer";
+import Header from "./components/Header";
 
 const ControlPanel = () => {
     return (
@@ -24,6 +24,6 @@ const ControlPanel = () => {
             </Grid2>
         </Box>
     );
-}
+};
 
 export default ControlPanel;

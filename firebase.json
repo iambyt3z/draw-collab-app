@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "draw-collab-5155d",
     "public": "dist",
     "ignore": [
       "firebase.json",
