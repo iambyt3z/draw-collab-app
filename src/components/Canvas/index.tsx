@@ -271,20 +271,22 @@ const Canvas = () => {
     }, [isPointingLaser, laserPoints]);
 
     useEffect(() => {
-        const query = ref(firebase.db, `rooms/${collabRoomId}`);
+        if (collabRoomId !== "") {
+            const query = ref(firebase.db, `rooms/${collabRoomId}`);
 
-        return onValue(query, (snapshot) => {
-            if (snapshot.exists()) {
-                const snapshotVal = snapshot.val();
+            return onValue(query, (snapshot) => {
+                if (snapshot.exists()) {
+                    let snapshotVal = snapshot.val();
 
-                decrypt(snapshotVal, collabRoomKey)
-                    .then((collabRoomData) => {
-                        const collabRoomShapes = collabRoomData.shapes as ShapeProps[];
-                        dispatch(setCollabRoomShapes(collabRoomShapes));
-                    });
-            }
-        });
-    }, []);
+                    decrypt(snapshotVal, collabRoomKey)
+                        .then((collabRoomData) => {
+                            const collabRoomShapes = collabRoomData.shapes as ShapeProps[];
+                            dispatch(setCollabRoomShapes(collabRoomShapes));
+                        });
+                }
+            });
+        }
+    }, [collabRoomId]);
 
     return (
         <Stage
