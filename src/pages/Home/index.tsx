@@ -7,6 +7,7 @@ import {
 import {
     setCollabRoomId,
     setCollabRoomKey,
+    setCollabRoomLink,
     setCollabRoomShapes
 } from "../../state/collabRoom/reducer";
 import { useNavigate, useParams } from "react-router-dom";
@@ -72,6 +73,7 @@ const Home = () => {
                                 dispatch(setCollabRoomShapes(collabRoomShapes));
                                 dispatch(setCollabRoomId(collabRoomId));
                                 dispatch(setCollabRoomKey(collabRoomKey));
+                                dispatch(setCollabRoomLink(window.location.href));
                             });
                     } else {
                         window.alert("Room does not exist. Redirecting to the home page.");

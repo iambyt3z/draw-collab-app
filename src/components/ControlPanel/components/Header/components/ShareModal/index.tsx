@@ -15,7 +15,9 @@ import {
     update
 } from "firebase/database";
 import { useAppDispatch, useAppSelector } from "../../../../../../state/store";
+import { useEffect, useState } from "react";
 
+import CheckIcon from "@mui/icons-material/Check";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import StopIcon from "@mui/icons-material/Stop";
 import encrypt from "../../../../../../utils/encrypt";
@@ -31,6 +33,8 @@ const ShareModel: React.FC<ShareModelProps> = ({
     onClose,
     open,
 }) => {
+    const [linkCopied, setLinkCopied] = useState(false);
+
     const dispatch = useAppDispatch();
 
     const collabRoomLink= useAppSelector((state) => state.collabRoom.collabRoomLink);
@@ -83,6 +87,23 @@ const ShareModel: React.FC<ShareModelProps> = ({
             .catch((error) => console.error(error));
     };
 
+    const handleCopyLinkToClipboard = () => {
+        navigator.clipboard.writeText(collabRoomLink)
+            .then(() => {
+                setLinkCopied(true);
+            });
+    };
+
+    useEffect(() => {
+        if (linkCopied) {
+            const timer = setTimeout(() => {
+                setLinkCopied(false);
+            }, 2000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [linkCopied]);
+
     return (
         <Modal
             open={open}
@@ -129,23 +150,19 @@ const ShareModel: React.FC<ShareModelProps> = ({
                                     >
                                         <Button
                                             variant="contained"
-                                            startIcon={<ContentCopyIcon/>}
-                                            sx={(theme) => ({
-                                                "& .MuiSvgIcon-root": {
-                                                    "color": theme.palette.common.white
-                                                },
-                                                "&:hover": {
-                                                    "backgroundColor": theme.palette.primary.dark
-                                                },
-                                                "backgroundColor": theme.palette.primary.main,
+                                            startIcon={(linkCopied) ? <CheckIcon/> : <ContentCopyIcon/>}
+                                            onClick={handleCopyLinkToClipboard}
+                                            color={(linkCopied) ? "success" : "primary"}
+                                            sx={{
                                                 "borderRadius": "5px",
                                                 "boxShadow": "none",
                                                 "height": "56px",
                                                 "pointerEvents": "all",
                                                 "textTransform": "capitalize",
-                                            })}
+                                                "width": "125px",
+                                            }}
                                         >
-                                            Copy Link
+                                            {(linkCopied) ? "Copied!" : "Copy Link"}
                                         </Button>
                                     </Box>
                                 </Stack>

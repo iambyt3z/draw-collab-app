@@ -91,7 +91,7 @@ const DrawnShape: React.FC<DrawnShapeProps> = ({
         return (
             <Line
                 key={config.id}
-                opacity={1}
+                opacity={(isBeingDrawn) ? beingDrawnOpacity : 1}
                 points={config.points as number[]}
                 stroke={config.stroke}
                 strokeWidth={config.strokeWidth}
