@@ -4,14 +4,14 @@ import { getAnalytics } from "firebase/analytics";
 import { getDatabase } from "firebase/database";
 
 const firebaseConfig: FirebaseOptions = {
-    "apiKey": "AIzaSyBDUcdRcpd9NR3ldyvqyL2FwyTE9Rxp6XA",
-    "appId": "1:506447633648:web:f1532cc3c78b7ab1cf7635",
-    "authDomain": "draw-collab-5155d.firebaseapp.com",
-    "databaseURL": "https://draw-collab-5155d-default-rtdb.firebaseio.com",
-    "measurementId": "G-LT7HCXPJE2",
-    "messagingSenderId": "506447633648",
-    "projectId": "draw-collab-5155d",
-    "storageBucket": "draw-collab-5155d.appspot.com"
+    "apiKey": import.meta.env.VITE_FIREBASE_API_KEY,
+    "appId": import.meta.env.VITE_FIREBASE_APP_ID,
+    "authDomain": import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    "databaseURL": import.meta.env.VITE_FIREBASE_DATABASE_URL,
+    "measurementId": import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+    "messagingSenderId": import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    "projectId": import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    "storageBucket": import.meta.env.VITE_FIREBASE_STORAGE_BUCKET
 };
 
 const app = initializeApp(firebaseConfig);

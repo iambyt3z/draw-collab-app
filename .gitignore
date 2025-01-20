@@ -14,6 +14,8 @@ dist-ssr
 bun.lockb
 .firebase
 
+.env
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
